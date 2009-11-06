@@ -1,9 +1,4 @@
 require 'rgen/metamodel_builder'
-require 'rgen/serializer/xmi20_serializer'
-
-def assert(*msg)
-        raise "Assertion failed! #{msg}" unless yield if $DEBUG
-end
 
 module RTT_mm
         extend RGen::MetamodelBuilder::ModuleExtension
@@ -25,12 +20,4 @@ module RTT_mm
         end
 
         Component.contains_many 'prop', Property, 'comp'
-end
-
-pack = RTT_mm.ecore
-assert pack.is_a?(RGen::ECore::EPackage)
-
-File.open("RTT_mm.ecore","w") do |f|
-        ser = RGen::Serializer::XMI20Serializer.new(f)
-        ser.serialize(RTT_mm.ecore)
 end
