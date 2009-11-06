@@ -11,22 +11,22 @@
 #include <rtt/Ports.hpp>
 <%nl%>
 #include <ocl/OCL.hpp>
-<%nl%>  
+<%nl%>
 using namespace std;
 using namespace RTT;
 using namespace Orocos;
 <%nl%>
-namespace OCL 
+namespace OCL
 {<% iinc %>
-	class name : public TaskContext 
-        {
+	class <%= name %> : public TaskContext
+	{
 	protected: <% iinc %>
-             <% expand 'prop_templ', :foreach => prop %> <% idec %>
-        };<% idec %>
+	     <% expand 'prop_templ', :foreach => prop %> <% idec %>
+	};<% idec %>
 }
     <% end %>
 <% end %>
 
 <% define 'prop_templ', :for => Property do %>
-Property<% (type) %> <% name %>
+Property <<%= valtype %>> <%= name %>;
 <% end %>

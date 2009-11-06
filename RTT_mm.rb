@@ -14,7 +14,7 @@ module RTT_mm
 
         # Property
         class Property < ModelElement
-                has_attr 'type', String
+                has_attr 'valtype', String
                 has_attr 'init_val', String
                 has_attr 'desc', String
         end

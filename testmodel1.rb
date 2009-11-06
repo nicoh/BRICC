@@ -15,9 +15,9 @@ OUTPUT_DIR="output/"
 env = RGen::Environment.new
 
 model1 = RGen::ModelBuilder.build(RTT_mm) do
-        Component "TestComponent1" do
-                Property :name => "Prop1", :type => "String", :init_val => "default", :desc => "A simple string property"
-                Property :name => "Prop2", :type => "int", :init_val => "32", :desc => "Just a integer property"
+        Component :name => "TestComponent1" do
+                Property :name => "Prop1", :valtype => "std::string", :init_val => "default", :desc => "A simple string property"
+                Property :name => "Prop2", :valtype => "int", :init_val => "32", :desc => "Just a integer property"
         end
 end
 
