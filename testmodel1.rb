@@ -1,3 +1,5 @@
+#!/usr/bin/ruby
+
 require 'rgen/environment'
 require 'rgen/array_extensions'
 require 'metamodels/uml13_metamodel'
@@ -16,8 +18,10 @@ env = RGen::Environment.new
 
 model1 = RGen::ModelBuilder.build(RTT_mm) do
         Component :name => "TestComponent1" do
-                Property :name => "Prop1", :valtype => "std::string", :init_val => "default", :desc => "A simple string property"
-                Property :name => "Prop2", :valtype => "int", :init_val => "32", :desc => "Just a integer property"
+                Property :name => "Prop1", :prop_type => "std::string", :initial => "default", :desc => "A simple string property"
+                Property :name => "Prop2", :prop_type => "int", :initial => "32", :desc => "Just a integer property"
+                InputPort :name => "CurPos", :port_type => "kdl::frame"
+                OutputPort :name => "DesVel", :port_type => "std::vector<double>"
         end
 end
 
