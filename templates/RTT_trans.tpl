@@ -1,16 +1,53 @@
 # Root
-<% define 'Root', :foreach => Component do %>
-<% file "Bla.hpp" do %>
+<% define 'Root', :for => Component do %>
+  <% expand 'RTT_hpp' %>
+  <% expand 'RTT_cpp' %>
+  <% expand 'RTT_cmake' %>
+<% end %>
 
-<% expand 'IfdefHeader', "XYZComp" %>
-<% expand 'rtt_headers' %>
-<%nl%>
-<% expand 'rtt_namespaces' %>
-<%nl%>
+#
+# CMakeLists.txt
+#
+<% define 'RTT_cmake', :for => Component do %>
+   <% file 'CMakeLists.txt' do %>
+
+DEPENDENT_OPTION( BUILD_<%= comp_name.upcase %> "Build <%= comp_name %> component" ON "BUILD TASKBROWSER" OFF)
+
+IF ( BUILD_<%= comp_name %> )
+<% iinc %>
+    FILE( GLOB SRCS [^.]*.cpp )
+    FILE( GLOB HPPS [^.]*.hpp )
+
+    ADD_EXECUTABLE( <%= comp_name %> ${SRCS} )
+    GLOBAL_ADD_COMPONENT( orocos-<%= comp_name %> ${SRCS} )
+    TARGET_LINK_LIBRARIES( <%= comp_name %> ${OROCOS_RTT_LIBS} )
+    PROGRAM_ADD_DEPS( <%= comp_name %> orocos-taskbrowser )
+<% idec %>
+ENDIF ( BUILD<%= comp_name %> )
+   <% end %>
+<% end %>
+
+#
+# Component cpp file
+#
+<% define 'RTT_cpp', :for => Component do %>
+   <% file comp_name+'.cpp' do %>
+   <% end %>
+<% end %>
+
+#
+# Component hpp file
+#
+<% define 'RTT_hpp', :for => Component do %>
+<% file comp_name+'.hpp' do %>
+
+<% expand 'IfdefHeader', comp_name.upcase %>
+<% expand 'rtt_headers' %> <%nl%>
+<% expand 'rtt_namespaces' %> <%nl%>
 
 namespace OCL
 {<% iinc %>
-        class <%= name %> : public TaskContext
+        class <%= comp_name %> : public TaskContext
         {
             protected:
             <% iinc %>
@@ -22,8 +59,8 @@ namespace OCL
             <% idec %>
         };<% idec %>
 }
-<% expand 'IfdefFooter', "HUALA" %>
-    <% end %>
+<% expand 'IfdefFooter', comp_name.upcase %>
+<% end %>
 <% end %>
 
 # prop_templ

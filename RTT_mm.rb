@@ -10,7 +10,7 @@ module RTT_mm
 	# Component
 	class Component < ModelElement
 		has_attr 'descr'
-		has_attr 'name'
+		has_attr 'comp_name'
 	end
 
 	# Method
@@ -31,7 +31,6 @@ module RTT_mm
 	class OutputPort < Port
 	end
 
-
 	# Property
 	class Property < ModelElement
 		has_attr 'name'
@@ -39,6 +38,13 @@ module RTT_mm
 		has_attr 'initial'
 		has_attr 'desc'
 	end
+
+        # Code, opaque code inserted somewhere
+        class Codel < ModelElement
+                has_attr 'name'
+                has_attr 'is_stateless', Boolean
+                has_attr 'code'
+        end
 
 	Component.contains_many 'props', Property, 'comp'
 	Component.contains_many 'ports', Port, 'comp'

@@ -14,10 +14,10 @@ require "RTT_mm"
 TEMPLATES_DIR = "templates/"
 OUTPUT_DIR="output/"
 
-env = RGen::Environment.new
+# env = RGen::Environment.new
 
 model1 = RGen::ModelBuilder.build(RTT_mm) do
-        Component :name => "TestComponent1" do
+        Component :comp_name => "TestComponent1" do
                 Property :name => "Prop1", :prop_type => "std::string", :initial => "default", :desc => "A simple string property"
                 Property :name => "Prop2", :prop_type => "int", :initial => "32", :desc => "Just a integer property"
                 InputPort :name => "CurPos", :port_type => "kdl::frame"
@@ -33,10 +33,10 @@ tc.indentString="\t"
 # the root template the following line starts generation
 
 # tc.expand('RTT_trans::Root', :for => env.find(:class => RTT_mm::Component, :indent => 1))
-tc.expand('RTT_trans::Root', :for => model1, :indent => 0)
+tc.expand('RTT_trans::Root', :foreach => model1, :indent => 0)
 
-
-# generate code                                                                                                                                                         # tc = RGen::TemplateLanguage::DirectoryTemplateContainer.new(StatemachineMetamodel, targetDir)
+# generate code
+# tc = RGen::TemplateLanguage::DirectoryTemplateContainer.new(StatemachineMetamodel, targetDir)
 # templatedir = File.dirname(__FILE__)+"/templates"
 # tc.load(templatedir)
 # tc.expand('Root::Root', :foreach => envSM.find(:class => StatemachineMetamodel::Statemachine))
