@@ -42,6 +42,7 @@ module RTT_mm
         # Code, opaque code inserted somewhere
         class Codel < ModelElement
                 has_attr 'name'
+                has_attr 'language'
                 has_attr 'is_stateless', Boolean
                 has_attr 'code'
         end
