@@ -21,4 +21,4 @@ tc = RGen::TemplateLanguage::DirectoryTemplateContainer.new(RTT_mm, OUTPUT_DIR)
 tc.load(TEMPLATES_DIR)
 tc.indentString="\t"
 
-tc.expand('RTT_trans::Root', :foreach => model1, :indent => 0)
+tc.expand('Root::Root', :foreach => model1, :indent => 0)
