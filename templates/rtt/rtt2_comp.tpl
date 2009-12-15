@@ -33,12 +33,16 @@ namespace OCL
 
 # prop_templ
 <% define 'prop_templ', :for => Property do %>
-Property<<%= prop_type %>> <%= name %>;
+Property<<%= prop_type %> > <%= name %>;
 <%end%>
 
 # Ports
 <% define 'port_templ', :for => Port do %>
-InputPort<<%= port_type %>> <%= name %>;
+   <% if dir == :in %>
+      InputPort<<%= port_type %> > <%= name %>;
+   <% elsif dir == :out %>
+      OutputPort<<%= port_type %> > <%= name %>;
+   <% end %>
 <%end%>
 
 # ifdef header
@@ -121,9 +125,7 @@ using namespace RTT;
 bool <% comp_name %>::configureHook()
 {
 <%iinc%>
-	// <configure_hook_codel>
 	return false;
-	// </configure_hook_codel>
 <%idec%>
 }
 

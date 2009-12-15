@@ -2,6 +2,7 @@ require 'rgen/metamodel_builder'
 
 module RTT_mm
 	extend RGen::MetamodelBuilder::ModuleExtension
+        include RGen::MetamodelBuilder::DataTypes
 
 	# basic ModelElement
 	class ModelElement < RGen::MetamodelBuilder::MMBase
@@ -9,7 +10,7 @@ module RTT_mm
 
 	# Component
 	class Component < ModelElement
-		has_attr 'descr'
+		has_attr 'desc'
 		has_attr 'comp_name'
 	end
 
@@ -20,22 +21,22 @@ module RTT_mm
 	end
 
 	# Port
+        PortDirKind = Enum.new(:name => "PortDirKind", :literals => [ :in, :out, :inout ])
+
 	class Port < ModelElement
 		has_attr 'name'
 		has_attr 'port_type'
-	end
-
-	class InputPort < Port
-	end
-
-	class OutputPort < Port
+                has_attr 'desc'
+                has_attr 'initial'
+                has_attr 'size'
+                has_attr 'dir', RTT_mm::PortDirKind
 	end
 
 	# Property
 	class Property < ModelElement
 		has_attr 'name'
 		has_attr 'prop_type'
-		has_attr 'initial'
+		has_attr 'value'
 		has_attr 'desc'
 	end
 
@@ -49,4 +50,5 @@ module RTT_mm
 
 	Component.contains_many 'props', Property, 'comp'
 	Component.contains_many 'ports', Port, 'comp'
+        Component.contains_one 'header_codel', Codel, 'comp'
 end

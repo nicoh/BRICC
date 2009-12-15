@@ -15,6 +15,8 @@
   <review status="unreviewed" notes=""/>
   <url>http://ros.org/wiki/dummy</url>
   <depend package="rtt-1.10"/>
+  <depend package="ocl-1.10"/>
+  <depend package="kdl-1.0"/>
 
   <%idec%>
 </package>
@@ -72,6 +74,7 @@ rosbuild_add_library(${PROJECT_NAME} src/<%= comp_name+'.cpp' %>)
 #rosbuild_link_boost(${PROJECT_NAME} thread)
 #rosbuild_add_executable(example examples/example.cpp)
 #target_link_libraries(example ${PROJECT_NAME})
-
+<%nl%>
+ADD_DEFINITIONS(-DOCL_DLL_EXPORT)
 <%end%>
 <%end%>
