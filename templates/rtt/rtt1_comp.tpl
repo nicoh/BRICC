@@ -7,7 +7,7 @@
 
 <% expand 'ifdef_header', comp_name.upcase %>
 <% expand 'rtt_headers' %>
-<% expand 'codel_templ', :for => header_codel %>
+<% expand 'codel_templ', :for => header_codel %> <%nl%>
 <% expand 'rtt_namespaces' %>
 
 namespace OCL
@@ -56,7 +56,6 @@ namespace OCL
 # codel, just insert opaque code in here
 <% define 'codel_templ', :for => Codel do %>
    <%= code %>
-   <%nl%>
 <%end%>
 
 # prop_templ
@@ -188,7 +187,11 @@ namespace OCL
         bool <%= comp_name %>::configureHook()
         {
         <%iinc%>
-                return false;
+		<% if initial_codel %>
+		   <% expand 'codel_templ', :for => initial_codel %>
+		<% else %>
+		   return true;
+		<% end %>
         <%idec%>
         }
 
@@ -208,7 +211,7 @@ namespace OCL
         void <%= comp_name %>::updateHook()
         {
         <%iinc%>
-                // tbd
+		<% expand 'codel_templ', :for => trigger_codel %>
         <%idec%>
         }
 
@@ -228,7 +231,9 @@ namespace OCL
         void <%= comp_name %>::cleanupHook()
         {
         <%iinc%>
-                // cleanup codel here
+		<% if initial_codel %>
+		   <% expand 'codel_templ', :for => final_codel %>
+		<% end %>
         <%idec%>
         }
 <%idec%>

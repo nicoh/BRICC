@@ -50,5 +50,8 @@ module RTT_mm
 
 	Component.contains_many 'props', Property, 'comp'
 	Component.contains_many 'ports', Port, 'comp'
-        Component.contains_one 'header_codel', Codel, 'comp'
+        Component.has_one 'header_codel', Codel
+        Component.has_one 'initial_codel', Codel
+        Component.has_one 'trigger_codel', Codel
+        Component.has_one 'final_codel', Codel
 end
