@@ -2,7 +2,7 @@
 #
 # CMakeLists.txt (OCL style)
 #
-<% define 'RTT_cmake', :for => Component do %>
+<% define 'OCL_cmake', :for => Component do %>
 <% file 'CMakeLists.txt' do %>
 
 DEPENDENT_OPTION( BUILD_<%= comp_name.upcase %> "Build <%= comp_name %> component" ON "BUILD TASKBROWSER" OFF)

@@ -8,9 +8,15 @@ require "RTT_mm"
 TEMPLATES_DIR = "templates/"
 OUTPUT_DIR="output/"
 
+headers = <<ENDTAG
+#include <kdl/frames.hpp>
+#include <iostream>
+#include <sstream>
+ENDTAG
+
 model1 = RGen::ModelBuilder.build(RTT_mm) do
 
-        Codel :name => 'kdl-headers', :language => "C++", :code => "#include <kdl/frames.hpp>"
+        Codel :name => 'kdl-headers', :language => "C++", :code => headers
         Codel :name => 'sayhello', :language => "C++", :code => 'cout << "hello" << endl;'
 
         Component( :comp_name => "TestComponent1",
@@ -59,4 +65,5 @@ tc.load(TEMPLATES_DIR)
 tc.indentString="\t"
 #tc.expand('Root::Root', :foreach => model1, :indent => 0)
 
-tc.expand('Root::Root', :foreach => model1.select { |o| o.class == RTT_mm::Component }, :indent => 0)
+# tc.expand('Root::Root_rtt_rosbuild', :foreach => model1.select { |o| o.class == RTT_mm::Component }, :indent => 0)
+tc.expand('Root::Root_ros_rosbuild', :foreach => model1.select { |o| o.class == RTT_mm::Component }, :indent => 0)
