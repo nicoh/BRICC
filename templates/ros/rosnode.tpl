@@ -50,11 +50,11 @@ int main(int argc, char** argv)
 
 <% define 'topic_templ', :for => Port do %>
    <% if dir == :in %>
-      // tbd in-port <%= name %>
+      ros::Subscriber <%= name %> = n.subscribe("<%= name %>", <%= size or 1 %>, <%= name %>_callback);
    <% elsif dir == :out %>
-      // <%= name %>
       ros::Publisher <%= name %> = n.advertise<<%= port_type %> >("<%= name %>", <%= size or 1 %>);
    <% else %>
-      // tbd inout-port  <%= name %>
+      // tbd inout-port <%= name %>
+      // ENOSUCHTHING
    <% end %>
 <%end%>

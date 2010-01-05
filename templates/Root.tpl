@@ -23,6 +23,3 @@
 	<% expand 'ros/rosbuild::ros_makefile' %>
 	<% expand 'ros/rosbuild::ros_node_manifest' %>
 <%end%>
-
-
-

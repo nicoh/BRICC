@@ -1,9 +1,8 @@
 #!/usr/bin/ruby
 
-require 'rgen/template_language'
 require 'rgen/model_builder'
 require 'rgen/template_language'
-require "RTT_mm"
+require "BCM_mm"
 
 TEMPLATES_DIR = "templates/"
 OUTPUT_DIR="output/"
@@ -14,30 +13,41 @@ headers = <<ENDTAG
 #include <sstream>
 ENDTAG
 
-model1 = RGen::ModelBuilder.build(RTT_mm) do
+model1 = RGen::ModelBuilder.build(BCM_mm) do
 
-        Codel :name => 'kdl-headers', :language => "C++", :code => headers
-        Codel :name => 'sayhello', :language => "C++", :code => 'cout << "hello" << endl;'
+        Codel :id => 'kdl-headers', :language => "c++", :code => headers
+        Codel :id => 'sayhello', :language => "c++", :code => 'cout << "hello" << endl;'
 
-        Component( :comp_name => "TestComponent1",
-                   :desc => "Just a dummy test component",
+        PrimitiveType :id => "brics.vector.x", :type => :uint32
+        PrimitiveType :id => "brics.vector.y", :type => :uint32
+        PrimitiveType :id => "brics.vector.z", :type => :uint32
+        
+        CompoundType :id => '3d_vector', :children => [ 'brics.vector.x',
+                                                        'brics.vector.y',
+                                                        'brics.vector.z' ]
+                                                        
+        
+        Component( :id => "TestComponent1",
+                   :descr => "Just a dummy test component",
+                   :valid_mode => :periodic,
                    :header_codel => 'kdl-headers',
                    :trigger_codel => 'sayhello' ) do
 
-                Property :name => "Prop1", :prop_type => "std::string", :value => '"default"', :desc => "A simple string property"
-                Property :name => "Prop2", :prop_type => "int", :value => "32", :desc => "Just a integer property"
 
-                Port :name => "CurPos", :dir => :in, :port_type => "KDL::Frame", :desc => "Current Position"
-                Port :name => "DesVel", :dir => :out, :port_type => "std::vector<double>", :desc => "Desired Velocity"
-                Port :name => "MaxVel", :dir => :out, :port_type => "double", :initial => "2.34", :desc => "Maximal Velocity"
-                #Port :name => "Test", :dir => :inout, :port_type => "std::vector<double>"
+                Property :id => "Prop1", :prop_type => "std::string", :value => '"default"', :descr => "A simple string property"
+                Property :id => "Prop2", :prop_type => "int", :value => "32", :descr => "Just a integer property"
+
+                InputPort :id => "CurPos", type => "KDL::Frame", :descr => "Current Position"
+                Port :id => "DesVel", :dir => :out, :port_type => "std::vector<double>", :descr => "Desired Velocity"
+                Port :id => "MaxVel", :dir => :out, :port_type => "double", :initial => "2.34", :descr => "Maximal Velocity"
+                #Port :id => "Test", :dir => :inout, :port_type => "std::vector<double>"
         end
 end
 
 # this is how simple verification can look like
 def verify_model(m)
         m.select { |c|
-                if c.instance_of?(RTT_mm::Port)
+                if c.instance_of?(BCM_mm::Port)
                         return true
                 else return false
                 end }.ports.collect{ |p|
@@ -46,7 +56,7 @@ def verify_model(m)
                         return false
                 end
         }
-        # m.header_codel.name, m.header_codel.language
+        # m.header_codel.id, m.header_codel.language
 end
 
 ## replace the abstract functions:
@@ -60,10 +70,12 @@ end
 
 verify_model(model1)
 
-tc = RGen::TemplateLanguage::DirectoryTemplateContainer.new(RTT_mm, OUTPUT_DIR)
+#param = { :output_dir => "bla", :target => 'rtt1' }
+
+tc = RGen::TemplateLanguage::DirectoryTemplateContainer.new(BCM_mm, OUTPUT_DIR)
 tc.load(TEMPLATES_DIR)
 tc.indentString="\t"
 #tc.expand('Root::Root', :foreach => model1, :indent => 0)
 
-# tc.expand('Root::Root_rtt_rosbuild', :foreach => model1.select { |o| o.class == RTT_mm::Component }, :indent => 0)
-tc.expand('Root::Root_ros_rosbuild', :foreach => model1.select { |o| o.class == RTT_mm::Component }, :indent => 0)
+# tc.expand('Root::Root_rtt_rosbuild', :foreach => model1.select { |o| o.class == BCM_mm::Component }, :indent => 0)
+tc.expand('Root::Root_ros_rosbuild', :foreach => model1.select { |o| o.class == BCM_mm::Component }, :indent => 0)
