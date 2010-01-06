@@ -1,58 +1,38 @@
-module BCM_types
+require 'rgen/metamodel_builder'
+
+module BCM_type_mm
         extend RGen::MetamodelBuilder::ModuleExtension
         include RGen::MetamodelBuilder::DataTypes
 
-        # Abstract Base Type
+        PrimitiveTypeKind = Enum.new(:literals => 
+                                     [ :bool, :string, :float32, :float64,
+                                       :uint8, :uint16, :uint32, :uint64,
+                                       :int8, :int16, :int32, :int64 ])
+
         class AbstractType < RGen::MetamodelBuilder::MMBase
-                has_attr 'id'
         end
 
-        # Primitive Types
-        class Bool < AbstractType
+        # Composite Type
+        class CompositeType < AbstractType
+                has_attr 'name'
+        end
+
+        # Abstract Subtype
+        class AbstractSubtype < AbstractType
+                has_attr 'name'
+                has_attr 'array_size'
+        end
+
+        # PrimitiveSubtype
+        class PrimitiveSubtype < AbstractSubtype
+                has_attr 'typeid', PrimitiveTypeKind
+        end
+
+        # CompositeSubtype
+        class CompositeSubtype < AbstractSubtype
         end
         
-        class UInt8 < AbstractType
-        end
+        CompositeType.contains_many_uni 'subtypes', AbstractSubtype
+        CompositeSubtype.has_one 'typeid', CompositeType
 
-        class UInt16 < AbstractType
-        end
-
-        class UInt32 < AbstractType
-        end
-
-        class UInt64 < AbstractType
-        end
-
-        class Int8 < AbstractType
-        end
-
-        class Int16 < AbstractType
-        end
-
-        class Int32 < AbstractType
-        end
-
-        class Int64 < AbstractType
-        end
-
-        class Float32 < AbstractType
-        end
-
-        class Float64 < AbstractType
-        end
-
-        class String < AbstractType
-        end
-
-        # NamedType
-        class NamedType
-                has_attr 'name', String
-        end
-        
-        # Compound Type
-        class Type < AbstractType
-        end
-
-        NamedType.has_one 'type' AbstractType, :lowerBound => 1
-        Type.contains_many 'members', AbstractType
 end

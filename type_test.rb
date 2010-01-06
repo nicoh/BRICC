@@ -2,34 +2,32 @@
 
 require 'rgen/model_builder'
 require 'rgen/template_language'
-require "BCM_type_mm"
+require 'BCM_type_mm'
 
-TEMPLATES_DIR = "templates/"
+TEMPLATES_DIR="tpl_typegen"
 OUTPUT_DIR="out_types/"
 
 model1 = RGen::ModelBuilder.build(BCM_type_mm) do
-
         
-        Type ( :id => 'Vector' ) do
-                NamedType :id => "x", :type => UInt32
-                NamedType :id => "y", :type => UInt32
-                NamedType :id => "z", :type => UInt32
+        CompositeType( :name => 'Vector' ) do
+                PrimitiveSubtype :name => 'x', :typeid => :uint32
+                PrimitiveSubtype :name => 'y', :typeid => :uint32
+                PrimitiveSubtype :name => 'z', :typeid => :uint32
         end
 
-        Type ( :id => 'Rotation' ) do
-                NamedType :id => 'X', :type => 'Vector'
-                NamedType :id => 'Y', :type => 'Vector'
-                NamedType :id => 'Z', :type => 'Vector'
+        CompositeType( :name => 'Rotation' ) do
+                CompositeSubtype :name => 'X', :typeid => 'Vector'
+                CompositeSubtype :name => 'Y', :typeid => 'Vector'
+                CompositeSubtype :name => 'Z', :typeid => 'Vector'
         end
 
-        Type ( :id => 'Frame' ) do
-                NamedType :id => 'P', :type => 'Vector'
-                NamedType :id => 'M', :type => 'Rotation'
+        CompositeType( :name => 'Frame' ) do
+                CompositeSubtype :name => 'P', :typeid => 'Vector'
+                CompositeSubtype :name => 'M', :typeid => 'Rotation'
         end
-
 end
 
 tc = RGen::TemplateLanguage::DirectoryTemplateContainer.new(BCM_type_mm, OUTPUT_DIR)
 tc.load(TEMPLATES_DIR)
 tc.indentString="\t"
-tc.expand('types/Root_rosmsg', :foreach => model1.select { |o| o.class == BCM_type_mm::Type }, :indent => 0)
+tc.expand('Rosmsg::Root_rosmsg', :foreach => model1.select { |o| o.class == BCM_type_mm::CompositeType }, :indent => 0)

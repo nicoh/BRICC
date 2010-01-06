@@ -1,5 +1,5 @@
 require 'rgen/metamodel_builder'
-require 'BCM_types'
+require 'BCM_type_mm'
 
 module BCM_mm
         extend RGen::MetamodelBuilder::ModuleExtension
@@ -21,7 +21,7 @@ module BCM_mm
 
         # Ports
         class Port < ModelElement
-                has_attr 'size'
+                has_attr 'size', Integer
         end
 
         class InputPort < Port
