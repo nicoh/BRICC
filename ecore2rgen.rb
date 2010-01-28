@@ -1,23 +1,44 @@
+#!/usr/bin/ruby
 
 require 'rgen/instantiator/ecore_xml_instantiator'
 require 'mmgen/metamodel_generator'
 
 include MMGen::MetamodelGenerator
 
-outfile = "bcm-regenerated.rb"
-infile = "bcm.ecore"
+def check_args(argv)
+        infile = argv[0]
+        outfile = argv[1]
+
+        def ops_and_die()
+                puts __FILE__ + " <ecore> <outfile>"
+                exit(1)
+        end
+
+        if argv.length < 1 then ops_and_die() end
+
+        if not ( FileTest.file?(infile) and
+                 FileTest.readable?(infile) ) then
+                puts("ERR: argument '" + infile + "' not a file or unreadable")
+                ops_and_die()
+        end
+
+        if not outfile then
+                outfile = File.basename(infile, ".ecore") + "-regen.rb"
+        end
+
+        return infile, outfile
+end
+
+infile, outfile = check_args(ARGV)
 
 # here we go
-puts "-instantiating..."
 env = RGen::Environment.new
 File.open(infile) { |f|
-        puts "instantiating ..."
-	ECoreXMLInstantiator.new(env).instantiate(f.read)
+        puts "instantiating " + infile + " ..."
+        ECoreXMLInstantiator.new(env).instantiate(f.read)
 }
 
 rootPackage = env.find(:class => RGen::ECore::EPackage).first
 
-puts "-generating..."
-#generateMetamodel(rootPackage, out_file, modules)
+puts "generating " + outfile + " ..."
 generateMetamodel(rootPackage, outfile)
-
