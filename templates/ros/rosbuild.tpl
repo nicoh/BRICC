@@ -7,9 +7,9 @@
 <% file 'manifest.xml' do %>
 <package>
   <%iinc%>
-  <description brief="<%= comp_name %>">
+  <description brief="<%= name %>">
 
-  <%= desc %>
+  <%= descr %>
 
   </description>
   <author></author>
@@ -28,9 +28,9 @@
 <% file 'manifest.xml' do %>
 <package>
   <%iinc%>
-  <description brief="<%= comp_name %>">
+  <description brief="<%= name %>">
 
-  <%= desc %>
+  <%= descr %>
 
   </description>
   <author></author>
@@ -92,11 +92,11 @@ set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
 #set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)
 <%nl%>
 #common commands for building c++ executables and libraries
-#rosbuild_add_library(${PROJECT_NAME} src/<%= comp_name+'.cpp' %>)
+#rosbuild_add_library(${PROJECT_NAME} src/<%= name+'.cpp' %>)
 #target_link_libraries(${PROJECT_NAME} another_library)
 #rosbuild_add_boost_directories()
 #rosbuild_link_boost(${PROJECT_NAME} thread)
-rosbuild_add_executable(${PROJECT_NAME} src/<%= comp_name+'.cpp' %>)
+rosbuild_add_executable(${PROJECT_NAME} src/<%= name+'.cpp' %>)
 #target_link_libraries(example ${PROJECT_NAME})
 
 <%end%>
@@ -130,7 +130,7 @@ set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)
 #rosbuild_gensrv()
 <%nl%>
 #common commands for building c++ executables and libraries
-rosbuild_add_library(${PROJECT_NAME} src/<%= comp_name+'.cpp' %>)
+rosbuild_add_library(${PROJECT_NAME} src/<%= name+'.cpp' %>)
 #target_link_libraries(${PROJECT_NAME} another_library)
 #rosbuild_add_boost_directories()
 #rosbuild_link_boost(${PROJECT_NAME} thread)

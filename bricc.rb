@@ -1,5 +1,4 @@
 #!/usr/bin/ruby
-require 'test/unit'
 
 require 'rgen/environment'
 require 'rgen/array_extensions'
@@ -14,7 +13,7 @@ if ARGV.length < 1 then
 end
 
 model_file = ARGV[0]
-target_dir = ARGV[1] or "output"
+target_dir = begin ARGV[1] or "output" end
 
 Templates_dir = "templates/"
 
@@ -26,7 +25,6 @@ model_env = eval(File.new(model_file).read())
 tc = RGen::TemplateLanguage::DirectoryTemplateContainer.new(Bcm, target_dir)
 tc.load(Templates_dir)
 tc.indentString="\t"
-
 tc.expand('Root::Root_ros_rosbuild', :foreach => model_env.select { |o| o.class == Bcm::Component }, :indent => 0)
 
 

@@ -88,14 +88,14 @@ Bcm::Component.contains_many_uni 'ops', Bcm::Operation
 Bcm::Component.has_many 'provides', Bcm::Interface 
 Bcm::Component.has_many 'requires', Bcm::Interface 
 Bcm::BCMObject.has_many 'annotations', Bcm::Annotation 
-Bcm::Property.has_one 'type', Bcm::Type, :lowerBound => 1 
-Bcm::Port.has_one 'type', Bcm::Type, :lowerBound => 1 
+Bcm::Property.has_one 'typeid', Bcm::Type, :lowerBound => 1 
+Bcm::Port.has_one 'typeid', Bcm::Type, :lowerBound => 1 
 Bcm::InputPort.has_one 'callback', Bcm::Codel 
 Bcm::OperationType.has_one 'sig', Bcm::Signature, :lowerBound => 1 
 Bcm::OperationType.many_to_one 'interface', Bcm::Interface, 'ops' 
 Bcm::Signature.contains_many_uni 'params', Bcm::Parameter 
 Bcm::Signature.has_one 'retval', Bcm::Type 
-Bcm::Parameter.has_one 'type', Bcm::Type, :lowerBound => 1 
+Bcm::Parameter.has_one 'typeid', Bcm::Type, :lowerBound => 1 
 Bcm::ProvOperation.has_one 'implements', Bcm::OperationType, :lowerBound => 1 
 Bcm::ProvOperation.has_one 'body', Bcm::Codel 
 Bcm::Interface.has_one 'super_if', Bcm::Interface 

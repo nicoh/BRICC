@@ -4,7 +4,7 @@ clean:
 	rm -rf output
 
 gen:
-	./testmodel1.rb
+	./bricc.rb model_ex1.rb
 
 rosmake:
 	rosmake output
