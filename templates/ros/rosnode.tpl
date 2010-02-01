@@ -21,6 +21,9 @@
 using namespace std;
 <%nl%>
 
+<% expand 'callback', :foreach => ports.select{|p| p.class == Bcm::InputPort } %>
+<%nl%>
+
 int main(int argc, char** argv)
 {
 	<%iinc%>
@@ -46,6 +49,18 @@ int main(int argc, char** argv)
 	<%idec%>
 }
 <%end%>
+<%end%>
+
+# callback
+<% define 'callback', :for => InputPort do %>
+   <% if callback then %>
+   void <%= name %>_callback(const <% expand '/typemodel::type_templ', :for => typeid %>& val)
+   {
+   <%iinc%>
+     <% expand '/common::codel_templ', :for => callback %>
+   <%idec%>
+   }
+   <%end%>
 <%end%>
 
 # Subscribe to topic

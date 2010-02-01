@@ -11,15 +11,8 @@ ENDTAG
 RGen::ModelBuilder.build(Bcm) do
         Codel :name => 'test-headers', :lang => "c++", :code => headers
         Codel :name => 'sayhello', :lang => "c++", :code => 'cout << "hello" << endl;'
+        Codel :name => 'pos_update', :lang => "c++", :code => 'cout << "received pos: " << val << endl;'
 
-        #PrimitiveType :name => "brics.vector.x", :typeid => :uint32
-        #PrimitiveType :name => "brics.vector.y", :typeid => :uint32
-        #PrimitiveType :name => "brics.vector.z", :typeid => :uint32
-        
-        #CompoundType :name => '3d_vector', :children => [ 'brics.vector.x',
-        #                                                'brics.vector.y',
-        #                                                'brics.vector.z' ]
-                                            
         Type( :name => "int" )
         Type( :name => "std::string" )
         
@@ -33,7 +26,7 @@ RGen::ModelBuilder.build(Bcm) do
                 Property :name => "Prop1", :typeid => "std::string", :default_val => "default", :descr => "A simple string property"
                 Property :name => "Prop2", :typeid => "int", :default_val => "32", :descr => "Just a integer property"
 
-                InputPort :name => "CurPos", :typeid => "int", :descr => "Current Position"
+                InputPort :name => "CurPos", :typeid => "int", :descr => "Current Position", :callback => 'pos_update'
                 OutputPort :name => "MaxVel", :typeid => "std::string", :descr => "Maximal Velocity"
         end
 end
