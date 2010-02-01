@@ -9,17 +9,19 @@ def check_args(argv)
         infile = argv[0]
         outfile = argv[1]
 
-        def ops_and_die()
+        def usage()
                 puts __FILE__ + " <ecore> <outfile>"
-                exit(1)
         end
 
-        if argv.length < 1 then ops_and_die() end
+        if argv.length < 1 then
+                usage()
+                exit(1)
+        end
 
         if not ( FileTest.file?(infile) and
                  FileTest.readable?(infile) ) then
                 puts("ERR: argument '" + infile + "' not a file or unreadable")
-                ops_and_die()
+                exit(1)
         end
 
         if not outfile then
