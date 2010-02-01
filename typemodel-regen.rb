@@ -8,15 +8,15 @@ module Typemodel
 end
 
 class Typemodel::Type < RGen::MetamodelBuilder::MMBase
-   has_attr 'name',  
+   has_attr 'name', String 
 end
 
 class Typemodel::CompositeType < Typemodel::Type
 end
 
 class Typemodel::Subtype < RGen::MetamodelBuilder::MMBase
-   has_attr 'field',  
-   has_attr 'array_size', , :defaultValueLiteral => "1" 
+   has_attr 'field', String 
+   has_attr 'array_size', Integer, :defaultValueLiteral => "1" 
 end
 
 class Typemodel::PrimitiveSubtype < RGen::MetamodelBuilder::MMMultiple(Typemodel::Subtype, Typemodel::Type)
