@@ -18,7 +18,7 @@ class Bcm::Component < Bcm::BCMObject
    has_attr 'trigger_freq', Integer 
 end
 
-class Bcm::Codel < RGen::MetamodelBuilder::MMBase
+class Bcm::Codel < Bcm::BCMObject
    has_attr 'code', String 
    has_attr 'lang', String 
 end
@@ -41,7 +41,7 @@ end
 class Bcm::OutputPort < Bcm::Port
 end
 
-class Bcm::OperationType < Bcm::BCMObject
+class Bcm::OperationType < RGen::MetamodelBuilder::MMBase
 end
 
 class Bcm::Signature < RGen::MetamodelBuilder::MMBase
@@ -51,7 +51,7 @@ class Bcm::Parameter < RGen::MetamodelBuilder::MMBase
    has_attr 'name', String 
 end
 
-class Bcm::Operation < RGen::MetamodelBuilder::MMBase
+class Bcm::Operation < Bcm::BCMObject
 end
 
 class Bcm::ProvOperation < Bcm::Operation
@@ -72,6 +72,10 @@ end
 class Bcm::IFConnection < RGen::MetamodelBuilder::MMBase
 end
 
+class Bcm::Annotation < RGen::MetamodelBuilder::MMBase
+   has_attr 'value', String 
+end
+
 
 Bcm::Component.has_many 'child', Bcm::Component 
 Bcm::Component.has_one 'trigger', Bcm::Codel 
@@ -83,6 +87,7 @@ Bcm::Component.contains_many 'ports', Bcm::Port, 'comp', :opposite_lowerBound =>
 Bcm::Component.contains_many_uni 'ops', Bcm::Operation 
 Bcm::Component.has_many 'provides', Bcm::Interface 
 Bcm::Component.has_many 'requires', Bcm::Interface 
+Bcm::BCMObject.has_many 'annotations', Bcm::Annotation 
 Bcm::Property.has_one 'type', Bcm::Type, :lowerBound => 1 
 Bcm::Port.has_one 'type', Bcm::Type, :lowerBound => 1 
 Bcm::InputPort.has_one 'callback', Bcm::Codel 
