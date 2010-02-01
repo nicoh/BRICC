@@ -9,7 +9,7 @@ module Bcm
 end
 
 class Bcm::BCMObject < RGen::MetamodelBuilder::MMBase
-   has_attr 'id', String 
+   has_attr 'name', String 
    has_attr 'descr', String 
 end
 
@@ -32,7 +32,7 @@ class Bcm::Port < Bcm::BCMObject
 end
 
 class Bcm::Type < RGen::MetamodelBuilder::MMBase
-   has_attr 'id', String 
+   has_attr 'name', String 
 end
 
 class Bcm::InputPort < Bcm::Port
