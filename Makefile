@@ -1,10 +1,17 @@
-all: clean gen rosmake
+BRICC=./bricc.rb
+
+all: model_ex1 ps rosmake
 
 clean:
-	rm -rf output
+	rm -rf out_*
 
-gen:
-	./bricc.rb model_ex1.rb
+model_ex1:
+	${BRICC} model_ex1.rb "out_model_ex1"
 
-rosmake:
-	rosmake output
+# publisher subscriber
+ps:
+	${BRICC} ex_publisher.rb "out_publisher"
+	${BRICC} ex_subscriber.rb "out_subscriber"
+
+rosmake: ps
+	rosmake out_publisher out_subscriber
