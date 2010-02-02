@@ -3,17 +3,17 @@
 ################################################################################
 
 <% define 'rtt_hpp', :for => Component do %>
-<% file 'src/'+comp_name+'.hpp' do %>
+<% file 'src/'+name+'.hpp' do %>
 
-<% expand 'ifdef_header', comp_name.upcase %>
+<% expand 'ifdef_header', name.upcase %>
 <% expand 'rtt_headers' %>
-<% expand '/common::codel_templ', :for => header_codel %> <%nl%>
+<% expand '/common::codel_templ', :for => header %> <%nl%>
 <% expand 'rtt_namespaces' %>
 
 namespace OCL
 {
 <%iinc%>
-        class <%= comp_name %> : public TaskContext
+        class <%= name %> : public TaskContext
         {
         protected:
         <%iinc%>
@@ -28,13 +28,13 @@ namespace OCL
                 * Constructor
                 * @ param the component name
                 */
-                <%= comp_name %>(std::string name);
+                <%= name %>(std::string name);
                 <%nl%>
 
                 /***
                 * Destructor
                 */
-                ~<%= comp_name %>();
+                ~<%= name %>();
                 <%nl%>
 
                 // Standard RTT hooks
@@ -48,28 +48,24 @@ namespace OCL
 <%idec%>
 }
 
-<% expand 'ifdef_footer', comp_name.upcase %>
+<% expand 'ifdef_footer', name.upcase %>
 
 <%end%>
 <%end%>
 
 # prop_templ
 <% define 'prop_templ', :for => Property do %>
-Property<<%= prop_type %> > <%= name %>;
+Property<<% expand '/typemodel::type_templ', :for => typeid %>> <%= name %>;
 <%end%>
-
 
 # Ports
-<% define 'port_templ', :for => Port do %>
-  <% if dir == :in %>
-        ReadBufferPort<<%= port_type %> > <%= name %>;
-  <% elsif dir == :out %>
-        WriteBufferPort<<%= port_type %> > <%= name %>;
-  <% else %>
-        ReadWritePort<<%= port_type %> > <%= name %>;
-  <% end %>
+<% define 'port_templ', :for => InputPort do %>
+   ReadBufferPort<<% expand '/typemodel::type_templ', :for => typeid %>> <%= name %>;
 <%end%>
 
+<% define 'port_templ', :for => OutputPort do %>
+   WriteBufferPort<<% expand '/typemodel::type_templ', :for => typeid %>> <%= name %>;
+<%end%>
 
 # ifdef header
 <% define 'ifdef_header', :for => Object do |name| %>
@@ -122,14 +118,13 @@ using namespace Orocos;
 <%end%>
 
 # Port constructor initializer
-<% define 'port_ctr_init', :for => Port do %>
-   <% if dir == :in %>
-      , <%= name %>("<%= name %>")
-   <% elsif dir == :out %>
-   , <%= name %>("<%= name %>", <%= size or 1 %><% if initial then %>, <%= initial %><%end%>)
-   <% else %>
-   , <%= name %>("<%= name %>", <%= size or 1 %><% if initial then %>, <%= initial %><%end%>)
-   <% end %>
+<% define 'port_ctr_init', :for => InputPort do %>
+   , <%= name %>("<%= name %>")
+<%end%>
+
+# tbd: initial value (annotation?)
+<% define 'port_ctr_init', :for => OutputPort do %>
+   , <%= name %>("<%= name %>", <%= size or 1 %>)
 <%end%>
 
 # assert that obj is ready
@@ -139,13 +134,13 @@ using namespace Orocos;
 # Component CPP
 #
 <% define 'rtt_cpp', :for => Component do %>
-<% file 'src/'+comp_name+'.cpp' do %>
+<% file 'src/'+name+'.cpp' do %>
 
-#include "<%= comp_name+'.hpp' %>"
+#include "<%= name+'.hpp' %>"
 #include <ocl/ComponentLoader.hpp>
 
 <%nl%>
-ORO_CREATE_COMPONENT( OCL::<%= comp_name %> )
+ORO_CREATE_COMPONENT( OCL::<%= name %> )
 <%nl%>
 
 using namespace std;
@@ -157,7 +152,7 @@ namespace OCL
 {
 <%iinc%>
         // Constructor
-        <%= comp_name %>::<%= comp_name %>(std::string name)
+        <%= name %>::<%= name %>(std::string name)
         <%iinc%>
                 : TaskContext(name)
                 <% expand 'prop_ctr_init', :foreach => props %>
@@ -172,18 +167,18 @@ namespace OCL
         <%nl%> <%nl%>
 
         // Destructor
-        <%= comp_name %>::~<%= comp_name %>()
+        <%= name %>::~<%= name %>()
         {
         }
 
         <%nl%> <%nl%>
 
         // configureHook
-        bool <%= comp_name %>::configureHook()
+        bool <%= name %>::configureHook()
         {
         <%iinc%>
-		<% if initial_codel %>
-		   <% expand '/common:codel_templ', :for => initial_codel %>
+		<% if init then %>
+		   <% expand '/common::codel_templ', :for => init %>
 		<% else %>
 		   return true;
 		<% end %>
@@ -193,7 +188,7 @@ namespace OCL
         <%nl%>
 
         // startHook()
-        bool <%= comp_name %>::startHook()
+        bool <%= name %>::startHook()
         {
         <%iinc%>
                 return false;
@@ -203,17 +198,17 @@ namespace OCL
         <%nl%>
 
         // updateHook
-        void <%= comp_name %>::updateHook()
+        void <%= name %>::updateHook()
         {
         <%iinc%>
-		<% expand '/common::codel_templ', :for => trigger_codel %>
+		<% expand '/common::codel_templ', :for => trigger %>
         <%idec%>
         }
 
         <%nl%>
 
         // stopHook()
-        void <%= comp_name %>::stopHook()
+        void <%= name %>::stopHook()
         {
         <%iinc%>
                 // stop codel here
@@ -223,12 +218,10 @@ namespace OCL
         <%nl%>
 
         // cleanupHook
-        void <%= comp_name %>::cleanupHook()
+        void <%= name %>::cleanupHook()
         {
         <%iinc%>
-		<% if initial_codel %>
-		   <% expand '/common::codel_templ', :for => final_codel %>
-		<% end %>
+		<% if final then expand '/common::codel_templ', :for => final end %>
         <%idec%>
         }
 <%idec%>
