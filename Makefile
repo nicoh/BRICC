@@ -1,17 +1,14 @@
 BRICC=./bricc.rb
 
-all: model_ex1 ps rosmake
+all: ps rmps
 
 clean:
 	rm -rf out_*
 
-model_ex1:
-	${BRICC} model_ex1.rb "out_model_ex1"
-
 # publisher subscriber
 ps:
-	${BRICC} ex_publisher.rb "out_publisher"
-	${BRICC} ex_subscriber.rb "out_subscriber"
+	${BRICC} -t ${TARGET} -o "out_publisher" ex_publisher.rb
+	${BRICC} -t ${TARGET} -o "out_subscriber" ex_subscriber.rb
 
-rosmake: ps
+rmps: ps
 	rosmake out_publisher out_subscriber
