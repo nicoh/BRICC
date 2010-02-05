@@ -1,0 +1,45 @@
+grammar Codel
+	rule top_entry
+	     (port_read / port_write / code)* {
+		def content
+		      elements.map{ |e| e.content }
+		end
+	     }
+	end
+
+	rule port_read
+	     'port_read' ws? '(' ws?  arg ws? ')' {
+		def content
+			[:port_read, arg.content]
+		end
+	     }
+ 	end
+
+	rule port_write
+	     'port_write' ws? '(' ws? arg1:arg ',' ws? arg2:arg ws? ')' {
+		def content
+			[:port_write, arg1.content, arg2.content]
+		end
+	     }
+ 	end
+
+	rule arg
+	     [\"a-zA-Z0-9_-]+ {
+		def content
+			[:arg, text_value]
+		end
+	     }
+	end
+
+	rule code
+	     (!'port_' . )+ {
+		def content
+			[:code, text_value]
+		end
+	     }
+	end
+
+	rule ws
+    	     [ \t]+
+	end
+end
