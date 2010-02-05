@@ -8,7 +8,7 @@ grammar Codel
 	end
 
 	rule port_read
-	     'port_read' ws? '(' ws?  arg ws? ')' {
+	     'bcm_port_read' ws? '(' ws?  arg ws? ')' {
 		def content
 			[:port_read, arg.content]
 		end
@@ -16,7 +16,7 @@ grammar Codel
  	end
 
 	rule port_write
-	     'port_write' ws? '(' ws? arg1:arg ',' ws? arg2:arg ws? ')' {
+	     'bcm_port_write' ws? '(' ws? arg1:arg ',' ws? arg2:arg ws? ')' {
 		def content
 			[:port_write, arg1.content, arg2.content]
 		end
@@ -32,7 +32,7 @@ grammar Codel
 	end
 
 	rule code
-	     (!'port_' . )+ {
+	     (!'bcm_' . )+ {
 		def content
 			[:code, text_value]
 		end

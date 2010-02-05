@@ -8,9 +8,9 @@ include Term::ANSIColor
 
 code = <<END
 // asd
-port_read(port);
+bcm_port_read(port);
 // bla
-port_write(port2, arg);
+bcm_port_write(port2, arg);
 END
 
 code2 = <<END
@@ -29,9 +29,20 @@ cout << "hello " << x << " times" << endl;
 ss << "Hello there! This is message [" << x << "]";
 prop_set(counter, ++x)
 msg.data = ss.str();
-x = port_read("portX");
-port_write("portY", 33);
+x = bcm_port_read("portX");
+bcm_port_write("portY", 33);
 chatter.publish(msg);
+END
+
+bcmapi =<<END
+// properties
+bcm_prop_read("propA")
+bcm_prop_write("propB", "value")
+
+// ports
+bcm_port_read("portX")
+bcm_port_write("portY", "99.9")
+
 END
 
 def testparse(str, ppast = false)
