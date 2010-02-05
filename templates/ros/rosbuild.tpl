@@ -19,6 +19,8 @@
   <depend package="rtt-1.10"/>
   <depend package="ocl-1.10"/>
   <depend package="kdl-1.0"/>
+  <depend package="roscpp"/>
+  <depend package="std_msgs"/>
   <%idec%>
 </package>
 <%end%>

@@ -69,7 +69,7 @@ tc = RGen::TemplateLanguage::DirectoryTemplateContainer.new(Bcm, options[:outdir
 tc.load(Templates_dir)
 tc.indentString="\t"
 
-if options[:verbose] then puts "generating to directory '#{options[:outdir]}'" end
+if options[:verbose] then puts "compiling #{model_file} to directory '#{options[:outdir]}' for target '#{options[:target]}' " end
 
 if options[:target] == :rtt then
         tc.expand('Root::Root_rtt_rosbuild', :foreach => model_env.select { |o| o.class == Bcm::Component }, :indent => 0)

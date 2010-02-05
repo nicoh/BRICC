@@ -112,9 +112,9 @@ using namespace Orocos;
 # Component cpp file
 ################################################################################
 
-# Property contstructor initalizer
+# Property contstructor initalizer: default val: set in ctr?
 <% define 'prop_ctr_init', :for => Property do %>
-   , <%= name %>("<%= name %>", "<%= desc %>", <%= value %>)
+   , <%= name %>("<%= name %>", "<%= descr %>")
 <%end%>
 
 # Port constructor initializer
@@ -127,7 +127,18 @@ using namespace Orocos;
    , <%= name %>("<%= name %>", <%= size or 1 %>)
 <%end%>
 
+# Add Properties to TC Interface
+<% define 'props_if_add', :for => Property do %>
+   this->properties()->addProperty( &<%= name %> );
+<%end%>
+
+# Add Ports to TC Interface
+<% define 'ports_if_add', :for => Port do %>
+   this->ports()->addPort( &<%= name %>, "<%= descr %>" );
+<%end%>
+
 # assert that obj is ready
+
 
 
 #
@@ -160,7 +171,9 @@ namespace OCL
         <%idec%>
         {
         <%iinc%>
-                // tbd add stuff to interface here
+                // add RTT stuff to interface here
+		<% expand 'props_if_add', :foreach => props %>
+		<% expand 'ports_if_add', :foreach => ports %>
         <%idec%>
         }
 
@@ -201,7 +214,7 @@ namespace OCL
         void <%= name %>::updateHook()
         {
         <%iinc%>
-		<% expand '/common::codel_templ', :for => trigger %>
+		<% if trigger then expand '/common::codel_templ', :for => trigger end %>
         <%idec%>
         }
 

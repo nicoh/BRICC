@@ -13,7 +13,7 @@
 <%nl%><%nl%>
 
 #include <ros/ros.h>
-#include <std_msgs/String.h>
+
 <%nl%>
 <% expand '/common::codel_templ', :for => header %>
 <%nl%>
@@ -99,3 +99,4 @@ while (ros::ok())
 <% define 'topic_templ', :for => OutputPort do %>
    ros::Publisher <%= name %> = nh.advertise< <% expand '/typemodel::type_templ', :for => typeid %> >("<%= name %>", <%= size or 1 %>);
 <%end%>
+
