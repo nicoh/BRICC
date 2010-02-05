@@ -36,24 +36,31 @@ END
 
 bcmapi =<<END
 // properties
-bcm_prop_read("propA")
-bcm_prop_write("propB", "value")
+bcm_prop_get("propA")
+bcm_prop_set("propB", "value")
 
 // ports
 bcm_port_read("portX")
-bcm_port_write("portY", "99.9")
+bcm_port_write("portY", 99)
+
+// operations
+bcm_call("reqOpX", varx, vary, varz)
 
 END
 
 def testparse(str, ppast = false)
-        puts (green '='*80)
-        codelp = CodelParser.new
-        puts(green(str))
-        ast = codelp.parse(str)
-        if ppast then pp ast end
-        puts (blue '-'*10)
-        pp ast.content
-        return ast
+	puts (magenta '='*80)
+	codelp = CodelParser.new
+	puts(green(str))
+	ast = codelp.parse(str)
+	if not ast then
+		puts(red(bold("Failed!")))
+		return
+	end
+	if ppast then pp ast end
+	puts (blue '-'*10)
+	pp ast.content
+	return ast
 end
 
 testparse('port_read    (   asd )')
@@ -62,5 +69,6 @@ testparse('justastring')
 testparse(code)
 testparse(code2)
 testparse(code3)
-
-
+testparse('bcm_call("reqOp", 1, x, y)')
+testparse('bcm_call("reqOp")')
+testparse(bcmapi)

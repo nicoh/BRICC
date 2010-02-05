@@ -1,12 +1,13 @@
 grammar Codel
 	rule top_entry
-	     (port_read / port_write / code)* {
+	     (port_read / port_write / prop_get / prop_set / call / code)* {
 		def content
 		      elements.map{ |e| e.content }
 		end
 	     }
 	end
 
+	# Ports
 	rule port_read
 	     'bcm_port_read' ws? '(' ws?  arg ws? ')' {
 		def content
@@ -19,6 +20,32 @@ grammar Codel
 	     'bcm_port_write' ws? '(' ws? arg1:arg ',' ws? arg2:arg ws? ')' {
 		def content
 			[:port_write, arg1.content, arg2.content]
+		end
+	     }
+ 	end
+
+	# Properties
+	rule prop_get
+	     'bcm_prop_get' ws? '(' ws?  arg ws? ')' {
+		def content
+			[:prop_get, arg.content]
+		end
+	     }
+ 	end
+
+	rule prop_set
+	     'bcm_prop_set' ws? '(' ws? arg1:arg ',' ws? arg2:arg ws? ')' {
+		def content
+			[:prop_set, arg1.content, arg2.content]
+		end
+	     }
+ 	end
+
+	# Operation
+	rule call
+	     'bcm_call' ws? '(' ws? opname:arg arglist:( ws? ',' ws? argument:arg )* ws? ')' {
+		def content
+			[:call, opname.content ] + arglist.elements.map {|e| e.argument.content}
 		end
 	     }
  	end
