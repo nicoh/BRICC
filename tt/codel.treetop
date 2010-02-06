@@ -53,7 +53,7 @@ grammar Codel
 	rule arg
 	     [\"a-zA-Z0-9_-]+ {
 		def content
-			[:arg, text_value]
+                        text_value
 		end
 	     }
 	end
