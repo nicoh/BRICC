@@ -1,4 +1,4 @@
 # codel, just insert opaque code in here
-<% define 'codel_templ', :for => Codel do %>
+<% define 'codel_templ', :for => Bcm::Codel do %>
    <%= code %>
 <%end%>

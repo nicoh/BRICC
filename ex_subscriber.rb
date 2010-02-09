@@ -2,12 +2,21 @@
 require 'rgen/model_builder'
 require 'bcm-regen'
 
-chatter_handler = <<ENDTAG
+chatter_handler = <<END
 cout << "received " << val->data << endl;
-ENDTAG
+END
+
+hdrs =<<END
+#include <iostream>
+#include <sstream>
+#include <std_msgs/String.h>
+#include <std_msgs/Int32.h>
+END
+
+
 
 RGen::ModelBuilder.build(Bcm) do
-        Codel( :name => 'test-headers', :lang => "c++", :code => headers = "#include <iostream>\n#include <sstream>\n" )
+        Codel( :name => 'test-headers', :lang => "c++", :code => headers = hdrs )
         Codel( :name => 'init', :lang => "c++", :code => '// init code comes here')
         Codel( :name => 'chatter_handler', :lang => "c++", :code => chatter_handler)
 

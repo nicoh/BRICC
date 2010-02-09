@@ -1,12 +1,16 @@
 #!/usr/bin/ruby
 
 require 'optparse'
+require 'pp'
 
 require 'rgen/environment'
 require 'rgen/array_extensions'
 require 'rgen/template_language'
 
-require 'bcm-regen.rb'
+require 'bcm-regen'
+require 'bcm-codel-ext'
+require 'bcm-codel-rtt'
+require 'bcm-codel-ros'
 
 Version = "0.1"
 Templates_dir = "templates/"
@@ -71,9 +75,11 @@ tc.indentString="\t"
 
 if options[:verbose] then puts "compiling #{model_file} to directory '#{options[:outdir]}' for target '#{options[:target]}' " end
 
+# codels = model_env.select { |o| o.class == Bcm::Codel }
+# codels.collect{|c| pp c.split_codel.content}
+
 if options[:target] == :rtt then
         tc.expand('Root::Root_rtt_rosbuild', :foreach => model_env.select { |o| o.class == Bcm::Component }, :indent => 0)
 elsif options[:target] == :ros then
         tc.expand('Root::Root_ros_rosbuild', :foreach => model_env.select { |o| o.class == Bcm::Component }, :indent => 0)
 end
-

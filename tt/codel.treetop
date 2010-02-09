@@ -51,7 +51,7 @@ grammar Codel
  	end
 
 	rule arg
-	     [\"a-zA-Z0-9_-]+ {
+	     [^,)]+ {
 		def content
                         text_value
 		end

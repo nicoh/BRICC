@@ -15,7 +15,7 @@
 #include <ros/ros.h>
 
 <%nl%>
-<% expand '/common::codel_templ', :for => header %>
+<% expand 'ros_codel', :for => header %>
 <%nl%>
 
 using namespace std;
@@ -30,14 +30,15 @@ int main(int argc, char** argv)
 	ros::init(argc, argv, "<%= name %>");
 	ros::NodeHandle nh;
 	<%nl%>
-	<% expand 'topic_templ', :foreach => ports %>
-	<%nl%>
+
+	<% expand 'topic_templ', :foreach => ports %> <%nl%>
+	<% expand 'property', :foreach => props %> <%nl%>
 
 	<% if trigger_freq %>
 	   ros::Rate loop_rate(<%= trigger_freq %>); <%nl%>
 	<% end %>
 
-	<% if init then expand '/common::codel_templ', :for => init end %>
+	<% if init then expand 'ros_codel', :for => init end %>
 
 	<% if trigger_freq %>
 	    <% expand 'periodic_body' %>
@@ -45,7 +46,7 @@ int main(int argc, char** argv)
 	    <% expand 'aperiodic_body' %>
 	<% end %>
 
-	<% if final then expand '/common::codel_templ', :for => final end %>
+	<% if final then expand 'ros_codel', :for => final end %>
 <%idec%>
 }
 <%end%>
@@ -57,7 +58,7 @@ while (ros::ok())
 {
 <%iinc%>
 	<% if trigger then %>
-	   <% expand '/common::codel_templ', :for => trigger %>
+	   <% expand 'ros_codel', :for => trigger %>
 	<% end %>
 	<%nl%>
 	<%# spinOnce could be added conditionally only if we have an InputPort with callback %>
@@ -72,7 +73,7 @@ while (ros::ok())
 #    on ly call spin if callbacks exist
 <% define 'aperiodic_body', :for => Component do %>
     <% if trigger then %>
-       <% expand '/common::codel_templ', :for => trigger %>
+       <% expand 'ros_codel', :for => trigger %>
     <% end %>
     <%nl%>
     ros::spin();
@@ -84,7 +85,7 @@ while (ros::ok())
    void <%= name %>_callback(const <% expand '/typemodel::type_templ', :for => typeid %>::ConstPtr& val)
    {
    <%iinc%>
-     <% expand '/common::codel_templ', :for => callback %>
+     <% expand 'ros_codel', :for => callback %>
    <%idec%>
    }
    <%end%>
@@ -98,5 +99,16 @@ while (ros::ok())
 # Advertise topic
 <% define 'topic_templ', :for => OutputPort do %>
    ros::Publisher <%= name %> = nh.advertise< <% expand '/typemodel::type_templ', :for => typeid %> >("<%= name %>", <%= size or 1 %>);
+<%end%>
+
+
+# ros_codel
+<% define 'ros_codel', :for => Bcm::Codel do %>
+   <%= codel2ros %>
+<%end%>
+
+# property: only a variable in ROS
+<% define 'property', :for => Bcm::Property do %>
+  <%= typeid.name %> <%= name %>;
 <%end%>
 

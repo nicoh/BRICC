@@ -1,29 +1,34 @@
 require 'rgen/model_builder'
 require 'bcm-regen'
 
-headers = <<ENDTAG
+headers = <<END
+// custom headers
 #include <std_msgs/String.h>
 #include <std_msgs/Int32.h>
 #include <iostream>
 #include <sstream>
-ENDTAG
+END
 
-hi_and_inc = <<ENDTAG
+hi_and_inc = <<END
 std::stringstream ss;
 std_msgs::String msg;
 
-int x = prop_get(counter)
+int x = bcm_prop_get(counter).data;
 cout << "hello " << x << " times" << endl;
 ss << "Hello there! This is message [" << x << "]";
-prop_set(counter, ++x)
+x++;
+
+// bcm_prop_set(counter.data, x);
+counter.data = x;
+
 msg.data = ss.str();
-chatter.publish(msg);
-ENDTAG
+bcm_port_write(chatter, msg);
+END
 
 RGen::ModelBuilder.build(Bcm) do
 	Codel( :name => 'test-headers', :lang => "c++", :code => headers )
 	Codel( :name => 'hi_and_inc', :lang => "c++", :code => hi_and_inc)
-	Codel( :name => 'init', :lang => "c++", :code => 'int x = 0;')
+	Codel( :name => 'init', :lang => "c++", :code => "int x = 0;\n")
 
 	Type( :name => "std_msgs::String" )
 	Type( :name => "std_msgs::Int32" )
@@ -39,7 +44,7 @@ RGen::ModelBuilder.build(Bcm) do
                 Property( :name => "counter", :descr => "this is a counter",
                           :typeid => "std_msgs::Int32", :default_val => "99" )
 
-		OutputPort( :name => "chatter",  :descr => "publishing strings to the chatter topic",
+		OutputPort( :name => "chatter",  :descr => "publishing strings to the chatter port",
                             :typeid => "std_msgs::String", :size => 100 )
 	end
 end
