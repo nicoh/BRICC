@@ -1,0 +1,13 @@
+
+To run the publisher subscriber example for 
+
+ROS
+---
+
+roscore
+rosrun out_publisher_ros out_publisher_ros
+rosrun out_subscriber_ros out_subscriber_ros 
+
+RTT
+---
+
