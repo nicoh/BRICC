@@ -23,6 +23,9 @@ namespace OCL
 		 <%nl%>
 		// Ports
 		<% expand 'port_templ', :foreach => ports %>
+		<%nl%>
+		// Event handles
+		<% expand 'input_port_event_handle', :foreach => ports.select { |p| p.class == Bcm::InputPort } %>
 	<%idec%>
 	public:
 	<%iinc%>
@@ -45,6 +48,9 @@ namespace OCL
 		void updateHook();
 		void stopHook();
 		void cleanupHook();
+		<%nl%>
+		// Port Event handlers
+		<% expand 'input_port_evh_decl', :foreach => ports.select { |p| p.class == Bcm::InputPort } %>
 	<%idec%>
 	};
 <%idec%>
@@ -55,17 +61,28 @@ namespace OCL
 <%end%>
 <%end%>
 
-# prop_templ
+# InputPort Event Handle
+<% define 'input_port_event_handle', :for => Bcm::InputPort do %>
+   <% if callback then %>
+      Handle <%= name %>_evh;
+   <%end%>
+<%end%>
+
+<% define 'input_port_evh_decl', :for => Bcm::InputPort do %>
+   void <%= name %>_handler(PortInterface*);
+<%end%>
+
+# Property definition
 <% define 'prop_templ', :for => Property do %>
 Property<<% expand '/typemodel::type_templ', :for => typeid %>> <%= name %>;
 <%end%>
 
+# alternative: Properties as variables
 <% define 'prop_vars', :for => Property do %>
    <%= typeid.name %> <%= name %>;
 <%end%>
 
-
-# Ports
+# Port definition
 <% define 'port_templ', :for => InputPort do %>
    ReadBufferPort<<% expand '/typemodel::type_templ', :for => typeid %>> <%= name %>;
 <%end%>
@@ -81,14 +98,12 @@ Property<<% expand '/typemodel::type_templ', :for => typeid %>> <%= name %>;
 <%nl%>
 <%end%>
 
-
 # ifdef footer
 <% define 'ifdef_footer', :for => Object do |name| %>
 <%nl%>
 #endif // __<%= name.upcase %>__
 <%nl%>
 <%end%>
-
 
 # rtt namespaces
 <% define 'rtt_namespaces' do %>
@@ -97,7 +112,6 @@ using namespace RTT;
 using namespace Orocos;
 <%nl%>
 <%end%>
-
 
 # rtt namespace
 <% define 'rtt_headers' do %>
@@ -145,10 +159,32 @@ using namespace Orocos;
 <%end%>
 
 # assert that obj is ready
+<% define 'assert_ready' do %>
+   <% ports.each do |p| %> assert(<%= p.name %>.ready() ); <%end%>
+<%end%>
 
 # RTT1 Codel
 <% define 'rtt_codel', :for => Bcm::Codel do %>
    <%= codel2rtt %>
+<%end%>
+
+# InputPort event handler setup in Ctr
+<% define 'input_port_setup_evh', :for => Bcm::InputPort do %>
+   PortInterface::NewDataOnPortEvent* <%= name %>_event = <%= name %>.getNewDataOnPortEvent();
+   <%= name %>_evh = <%= name %>_event->connect(boost::bind(&<%=comp.name %>::<%=name%>_handler,this,_1),this->engine()->events());
+<%end%>
+
+# InputPort member function
+<% define 'input_port_handler', :for => Bcm::InputPort do %>
+   void <%= comp.name %>::<%= name %>_handler(PortInterface* portif)
+   {
+   <%iinc%>
+	assert(portif == &<%= name %>);
+	<%= typeid.name %> *val = new <%= typeid.name %>();
+	<%= name %>.Pop(*val);
+	<% expand 'rtt_codel', :for => callback %>
+   <%idec%>
+   }
 <%end%>
 
 #
@@ -181,9 +217,15 @@ namespace OCL
 	<%idec%>
 	{
 	<%iinc%>
+		// assert everything is OK
+		<%# expand 'assert_ready' %> <%nl%>
+
 		// add RTT stuff to interface here
 		<%# expand 'props_if_add', :foreach => props %>
-		<% expand 'ports_if_add', :foreach => ports %>
+		<% expand 'ports_if_add', :foreach => ports %> <%nl%>
+
+		// setup InportEvent handlers
+		<% expand 'input_port_setup_evh', :foreach => ports.select { |p| p.class == Bcm::InputPort } %>
 	<%idec%>
 	}
 
@@ -247,6 +289,8 @@ namespace OCL
 		<% if final then expand 'rtt_codel', :for => final end %>
 	<%idec%>
 	}
+	<%nl%>
+	<% expand 'input_port_handler', :foreach => ports.select { |p| p.class == Bcm::InputPort && p.callback } %>
 <%idec%>
 }
 <%end%>

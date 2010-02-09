@@ -14,7 +14,7 @@ std::stringstream ss;
 std_msgs::String msg;
 
 int x = bcm_prop_get(counter).data;
-cout << "hello " << x << " times" << endl;
+// cout << "hello " << x << " times" << endl;
 ss << "Hello there! This is message [" << x << "]";
 x++;
 

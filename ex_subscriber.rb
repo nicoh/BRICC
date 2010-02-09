@@ -17,7 +17,7 @@ END
 
 RGen::ModelBuilder.build(Bcm) do
         Codel( :name => 'test-headers', :lang => "c++", :code => headers = hdrs )
-        Codel( :name => 'init', :lang => "c++", :code => '// init code comes here')
+        Codel( :name => 'init', :lang => "c++", :code => "// init code comes here\nreturn true;")
         Codel( :name => 'chatter_handler', :lang => "c++", :code => chatter_handler)
 
         Type( :name => "std_msgs::String" )
