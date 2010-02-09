@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "cpf.dtd">
+<properties>
+<simple name="Import" type="string"><value>out_publisher_rtt/lib/libout_publisher_rtt.so</value></simple>
+<simple name="Import" type="string"><value>out_subscriber_rtt/lib/libout_subscriber_rtt.so</value></simple>
+
+<struct name="Deployer" type="OCL::DeploymentComponent">
+  <simple name="AutoStart" type="boolean"><value>1</value></simple>
+  <!-- <simple name="ProgramScript" type="string"><value>scripts/init_ball.ops</value></simple> -\-> -->
+</struct>
+
+<struct name="publisher" type="OCL::BCM_Publisher">
+  <struct name="Activity" type="PeriodicActivity">
+    <simple name="Period" type="double"><value>1</value></simple>
+    <simple name="Priority" type="short"><value>0</value></simple>
+    <simple name="Scheduler" type="string"><value>ORO_SCHED_OTHER</value></simple>
+   </struct>
+  <simple name="AutoStart" type="boolean"><value>1</value></simple>
+  <simple name="AutoConnect" type="boolean"><value>1</value></simple>
+  <struct name="Peers" type="PropertyBag">
+    <simple type="string"><value>subscriber</value></simple>
+  </struct>
+</struct>
+
+<struct name="subscriber" type="OCL::BCM_Subscriber">
+  <struct name="Activity" type="PeriodicActivity">
+    <simple name="Period" type="double"><value>1</value></simple>
+    <simple name="Priority" type="short"><value>0</value></simple>
+    <simple name="Scheduler" type="string"><value>ORO_SCHED_OTHER</value></simple>
+  </struct>
+  <simple name="AutoStart" type="boolean"><value>1</value></simple>
+  <simple name="AutoConnect" type="boolean"><value>1</value></simple>
+  <struct name="Peers" type="PropertyBag">
+    <simple type="string"><value>publisher</value></simple>
+  </struct>
+</struct>
+
+</properties>
