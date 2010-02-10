@@ -1,4 +1,5 @@
-BRICC=./bricc.rb
+BRICC=../bricc.rb
+RUBYLIB=${RUBYLIB}":../"
 
 all: ps rmps
 

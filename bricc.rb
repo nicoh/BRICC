@@ -1,5 +1,9 @@
 #!/usr/bin/ruby
 
+Base_dir = File.expand_path(File.dirname(__FILE__))
+puts Base_dir
+$:.unshift Base_dir
+
 require 'optparse'
 require 'pp'
 
@@ -13,7 +17,7 @@ require 'bcm-codel-rtt'
 require 'bcm-codel-ros'
 
 Version = "0.1"
-Templates_dir = "templates/"
+Templates_dir = Base_dir+"/templates/"
 
 # option parsing
 options = {}
@@ -74,9 +78,6 @@ tc.load(Templates_dir)
 tc.indentString="\t"
 
 if options[:verbose] then puts "compiling #{model_file} to directory '#{options[:outdir]}' for target '#{options[:target]}' " end
-
-# codels = model_env.select { |o| o.class == Bcm::Codel }
-# codels.collect{|c| pp c.split_codel.content}
 
 if options[:target] == :rtt then
         tc.expand('Root::Root_rtt_rosbuild', :foreach => model_env.select { |o| o.class == Bcm::Component }, :indent => 0)
