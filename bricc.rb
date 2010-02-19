@@ -1,7 +1,6 @@
 #!/usr/bin/ruby
 
 Base_dir = File.expand_path(File.dirname(__FILE__))
-puts Base_dir
 $:.unshift Base_dir
 
 require 'optparse'

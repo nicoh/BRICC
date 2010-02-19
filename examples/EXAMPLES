@@ -1,13 +1,40 @@
 
-To run the publisher subscriber example for 
+* The Publisher Subscriber use case
 
-ROS
----
+  Generates two simple component used for transferring a simple data
+  between them.
 
-roscore
-rosrun out_publisher_ros out_publisher_ros
-rosrun out_subscriber_ros out_subscriber_ros 
+** Generating Components
 
-RTT
----
+   publisher-subscriber example for TARGET=x
 
+   $ make ps TARGET=ros
+   $ make ps TARGET=rtt
+
+   will generate the following ros packages:
+
+   out_publisher_ros
+   out_publisher_rtt
+   out_subscriber_ros
+   out_subscriber_rtt
+
+   assuming you have a working ROS installation you can run:
+
+   $ rosmake out_*
+
+** Running
+
+   To run the publisher-subscriber example for
+
+*** ROS
+
+    $ roscore
+    $ rosrun out_publisher_ros out_publisher_ros
+    $ rosrun out_subscriber_ros out_subscriber_ros 
+
+*** RTT
+
+    $ ./run_rtt.sh
+
+    Note: this assumes a specific ROS/RTT setup, so you might have to
+    adapt some paths.

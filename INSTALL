@@ -1,7 +1,15 @@
 
-required gems
- - rgen
- - polyglot
- - treetop
+* GEMS
+
+  bricc requires the following ruby gems
+
+  (run gem -h for help)
+
+   - rgen
+   - polyglot
+   - treetop
 
 
+* VERSION
+
+  Currently only ruby 1.8 has been tested.

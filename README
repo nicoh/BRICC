@@ -1,0 +1,66 @@
+* BRICC
+
+** Usage
+
+$ ./bricc.rb -h
+Usage: ./bricc.rb [options] file
+    -h, --help                       Displays this information
+    -V, --version                    Print version
+    -t, --target TARGET              Transformation target [rtt|ros]
+    -v, --verbose                    More verbose output
+    -o, --outdir DIR                 Output directory
+    -p, --params a,b=x,c             List of target specific parameters
+
+
+** Model files
+
+   IMPORTANT:
+
+   you can use arbitrary Ruby expressions in the model file to read
+   codels from other files etc, but it is important that the actual
+   model enclosed in "RGen::ModelBuilder.build(Bcm) do [...] end" is
+   the *last* statement in the file.
+
+   See 'ex_publisher.rb' and 'ex_subscriber.rb' in examples.
+
+
+** Internals
+
+*** Files
+
+    bricc.rb:
+	 briccs component compiler, reads model and
+
+    bcm-regen.rb:
+	 the current metamodel (generated from the Eclipse Ecore
+	 model, so don't edit directly)
+
+    bcm-codel-ext.rb
+	 toplevel codel parsing
+
+    bcm-codel-ros.rb
+    bcm-codel-rtt.rb
+   	 conversion of bcm_operations to target specific operations
+
+   templates/
+	 code generation templates
+
+   tt/
+	 PEG grammer used for codel parser generation
+
+    rgen2ecore.rb, ecore2rgen.rb, regenerate.sh
+	 helper tools for converting metamodels from the Eclipse version
+
+
+*** Creating a new target
+
+    For creating a new target "foo" you will need to:
+
+       1) add the "foo" target to the toplevel bricc.rb option
+	  handling and to the code generator call.
+
+       2) add a "dispatching" template to templates/Root.tpl
+
+       3) create a new target subdirectory templates/foo
+
+       4) implement appropriate templates to generate your target
