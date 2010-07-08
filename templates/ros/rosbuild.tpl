@@ -16,9 +16,9 @@
   <license>BSD</license>
   <review status="unreviewed" notes=""/>
   <url>http://www.orocos.org/wiki/</url>
-  <depend package="rtt-1.10"/>
-  <depend package="ocl-1.10"/>
-  <depend package="kdl-1.0"/>
+  <depend package="rtt_1.10"/>
+  <depend package="ocl_1.10"/>
+  <depend package="kdl_1.0"/>
   <depend package="roscpp"/>
   <depend package="std_msgs"/>
   <%idec%>
