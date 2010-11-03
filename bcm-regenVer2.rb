@@ -30,9 +30,11 @@ end
 class Bcm::Port < Bcm::BCMObject
    has_attr 'size', Integer 
 end
-
+#Changed Type to be able to work with touples and data types in Ruby
+#not only string matching
 class Bcm::Type < RGen::MetamodelBuilder::MMBase
    has_attr 'name', String 
+   has_attr 'typevalue', PrimitiveTypeKing
 end
 
 class Bcm::InputPort < Bcm::Port

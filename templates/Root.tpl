@@ -18,8 +18,16 @@
 
 # ROS node, rosbuild system
 <% define 'Root_ros_rosbuild', :for => Component do %>
-	<% expand 'ros/rosnode::rosnode_cpp' %>
+	<% expand 'ros/rossrvnode::rosnode_cpp' %>
 	<% expand 'ros/rosbuild::ros_node_cmakelists' %>
 	<% expand 'ros/rosbuild::ros_makefile' %>
 	<% expand 'ros/rosbuild::ros_node_manifest' %>
+<%end%>
+
+# OpenRTM Component
+<% define 'Root_rtc', :for => Component do %>
+	<% expand 'rtc/rtc::rtc_h' %>
+	<% expand 'rtc/rtc::rtc_cpp' %>
+	<% expand 'rtc/rtc::rtc_standalone' %>
+	<% expand 'rtc/makefile::rtc_makefile' %>
 <%end%>

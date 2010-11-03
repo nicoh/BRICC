@@ -12,4 +12,4 @@ ps:
 	${BRICC} -t ${TARGET} -o out_subscriber_${TARGET} ex_subscriber.rb
 
 rmps: ps
-	rosmake out_publisher_${TARGET} out_subscriber_${TARGET}
+	rosmake out_publisher_${TARGET} #out_subscriber_${TARGET}

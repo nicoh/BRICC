@@ -17,7 +17,7 @@ END
 
 RGen::ModelBuilder.build(Bcm) do
         Codel( :name => 'test-headers', :lang => "c++", :code => headers = hdrs )
-        Codel( :name => 'init', :lang => "c++", :code => "// init code comes here\n")
+        Codel( :name => 'init', :lang => "c++", :code => "// init code comes here\nreturn true;")
         Codel( :name => 'chatter_handler', :lang => "c++", :code => chatter_handler)
 
         Type( :name => "std_msgs::String" )
@@ -27,8 +27,10 @@ RGen::ModelBuilder.build(Bcm) do
                    :valid_mode => :periodic,
                    :header => 'test-headers',
                    :init => 'init' ) do
-                
                 InputPort( :name => "chatter", :descr => "input for chattering",
                            :typeid => "std_msgs::String", :callback => 'chatter_handler')
+                OutputPort( :name => "fakeServicePortOut3",  :descr => "adder service3", 
+                            :typeid => "std_msgs::String", :size => 100 )
+
         end
 end

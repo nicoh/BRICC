@@ -1,8 +1,9 @@
-#!/usr/bin/ruby
+#!/usr/bin/ruby1.8
 
 Base_dir = File.expand_path(File.dirname(__FILE__))
 $:.unshift Base_dir
 
+require 'rubygems'
 require 'optparse'
 require 'pp'
 
@@ -14,6 +15,7 @@ require 'bcm-regen'
 require 'bcm-codel-ext'
 require 'bcm-codel-rtt'
 require 'bcm-codel-ros'
+# require 'bcm-codel-rtc'
 
 Version = "0.1"
 Templates_dir = Base_dir+"/templates/"
@@ -34,7 +36,7 @@ optparse = OptionParser.new do|opts|
                 exit
 	end
 
-	opts.on( '-t', '--target TARGET', [:rtt, :ros], "Transformation target [rtt|ros]" ) do |t|
+	opts.on( '-t', '--target TARGET', [:rtt, :ros, :rtc], "Transformation target [rtt|ros|rtc]" ) do |t|
 		options[:target] = t
 	end
 
@@ -82,4 +84,7 @@ if options[:target] == :rtt then
         tc.expand('Root::Root_rtt_rosbuild', :foreach => model_env.select { |o| o.class == Bcm::Component }, :indent => 0)
 elsif options[:target] == :ros then
         tc.expand('Root::Root_ros_rosbuild', :foreach => model_env.select { |o| o.class == Bcm::Component }, :indent => 0)
+elsif options[:target] == :rtc then
+        tc.expand('Root::Root_rtc', :foreach => model_env.select { |o| o.class == Bcm::Component }, :indent => 0)
+
 end

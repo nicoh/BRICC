@@ -65,16 +65,11 @@ RGen::ModelBuilder.build(Bcm) do
 		   :init => 'init', 
        :provides => "serviceAdder") do
     
-    InputPort( :name => "fakeServicePortIn1",  :descr => "adder service1", 
-                :typeid => "std_msgs::String", :size => 100, :callback => 'serviceFunction1' )
-    InputPort( :name => "fakeServicePortIn2",  :descr => "adder service2", 
-                :typeid => "std_msgs::String", :size => 100, :callback => 'serviceFunction2' )
-    OutputPort( :name => "fakeServicePortOut3",  :descr => "adder service3", 
-                :typeid => "std_msgs::String", :size => 100 )
-    ProvOperation( :name => "fakeServiceOperOut4",  :descr => "adder operation",
-                   :body => 'operationCodel', :implements =>'operType_Command1')
-    ProvOperation( :name => "fakeServiceOperOut5",  :descr => "adder operation",
-                   :body => 'operationCodel', :implements =>'operType_Command2')
+    InputPort( :name => "fakeServicePortIn1", :typeid => "std_msgs::String", :size => 100, :callback => 'serviceFunction1' )
+    InputPort( :name => "fakeServicePortIn2", :typeid => "std_msgs::String", :size => 100, :callback => 'serviceFunction2' )
+    OutputPort( :name => "fakeServicePortOut3",  :typeid => "std_msgs::String", :size => 100 )
+
+    ProvOperation( :name => "fakeServiceOperOut4",:body => 'operationCodel')
 
 	end
 end
